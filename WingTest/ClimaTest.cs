@@ -34,7 +34,6 @@ namespace Csvier.Test
                 }
 
                 Assert.AreEqual(19, max);
-                // Console.WriteLine(String.Join("\n", infos));
             }
         }
     }

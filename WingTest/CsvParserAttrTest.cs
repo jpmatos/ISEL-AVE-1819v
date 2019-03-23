@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Csvier.Test
 {
     [TestFixture]
-    public class CsvParserTest
+    public class CsvParserAttrTest
     {
         [Test]
         public void CleanCvsExampleTest()
@@ -16,7 +16,7 @@ namespace Csvier.Test
                 "2019-01-03,24,16,60,7,11,89,E,113,http://cdn.worldweatheronline.net/images/wsymbols01_png_64/wsymbol_0001_sunny.png,Sunny,0.0,67,10,1026,3,13,55,7,45,12,54,11,18,12,54\n" +
                 "2019-01-04,24,16,60,9,15,78,ENE,116,http://cdn.worldweatheronline.net/images/wsymbols01_png_64/wsymbol_0002_sunny_intervals.png,Partly cloudy,0.1,73,10,1028,27,14,57,9,48,13,55,14,23,13,55";
 
-            CsvParser pastWeather = (CsvParser) new CsvParser(typeof(WeatherInfo))
+            CsvParserAttr pastWeather = (CsvParserAttr) new CsvParserAttr(typeof(WeatherInfo),  "Ctor3")
                 .CtorArg("date", 0)
                 .CtorArg("tempC", 2)
                 .PropArg("PrecipMM", 11)
@@ -75,7 +75,7 @@ namespace Csvier.Test
                 "2019-01-04,24,16,60,9,15,78,ENE,116,http://cdn.worldweatheronline.net/images/wsymbols01_png_64/wsymbol_0002_sunny_intervals.png,Partly cloudy,0.1,73,10,1028,27,14,57,9,48,13,55,14,23,13,55\n" +
                 "2019-01-05,16,61,11,52,07:46 AM,05:29 PM,07:10 AM,05:10 PM,Waning Crescent,7\n" +
                 "2019-01-05,24,16,61,8,13,70,ENE,113,http://cdn.worldweatheronline.net/images/wsymbols01_png_64/wsymbol_0001_sunny.png,Sunny,0.0,64,10,1032,0,13,55,6,43,12,53,13,21,12,53\n";
-            CsvParser pastWeather = (CsvParser) new CsvParser(typeof(WeatherInfo)).Load(sampleWeather);
+            CsvParserAttr pastWeather = (CsvParserAttr) new CsvParserAttr(typeof(WeatherInfo), "Ctor3").Load(sampleWeather);
 
             pastWeather.RemoveWith("#");
             Assert.AreEqual("",

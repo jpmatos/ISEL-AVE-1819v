@@ -1,11 +1,7 @@
 ﻿using Csvier;
 using Request;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Clima
 {
@@ -48,7 +44,7 @@ namespace Clima
             string searchQuery = string.Format(PATH_WEATHER, latStr, logStr, fromStr, toStr);
             string searchResult = req.GetBody(searchQuery);
 
-            CsvParser weatherParser = new CsvParser(typeof(WeatherInfo), ',')
+            CsvParser weatherParser = (CsvParser) new CsvParser(typeof(WeatherInfo), ',')
                 .CtorArg("date", 0)
                 .CtorArg("tempC", 2)
                 .PropArg("PrecipMM", 11)
@@ -72,7 +68,7 @@ namespace Clima
             string searchQuery = string.Format(SEARCH, query);
             string searchResult = req.GetBody(searchQuery);
 
-            CsvParser locationsParser = new CsvParser(typeof(LocationInfo), '\t')
+            CsvParser locationsParser = (CsvParser) new CsvParser(typeof(LocationInfo), '\t')
                 .CtorArg("country", 1)
                 .CtorArg("region", 2)
                 .CtorArg("latitude", 3)

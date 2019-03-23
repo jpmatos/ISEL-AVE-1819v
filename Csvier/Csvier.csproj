@@ -40,7 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractParser.cs" />
     <Compile Include="CsvParser.cs" />
+    <Compile Include="CsvParserAttr.cs" />
+    <Compile Include="IParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
