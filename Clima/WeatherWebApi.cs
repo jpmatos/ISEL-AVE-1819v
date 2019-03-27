@@ -16,7 +16,7 @@ namespace Clima
 
         const string SEARCH = WEATHER_HOST + "search.ashx?query={0}&format=tab&key=" + WEATHER_KEY;
 
-        readonly CsvParser pastWeather;
+        readonly CsvParser pastWeather;    //TODO why is this here
         readonly CsvParser locations;
         readonly IHttpRequest req;
 

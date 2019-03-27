@@ -53,6 +53,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClimateDataTest.cs" />
     <Compile Include="ClimaTest.cs" />
     <Compile Include="CsvParserAttrTest.cs" />
     <Compile Include="CsvParserTest.cs" />
@@ -73,6 +74,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ClimateData\ClimateData.csproj">
+      <Project>{93c56dfe-f163-4ec1-a1b0-4d9e0750bced}</Project>
+      <Name>ClimateData</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Clima\Clima.csproj">
       <Project>{edb6b12d-1a1b-4c9c-a14f-6084f742d4c3}</Project>
       <Name>Clima</Name>
