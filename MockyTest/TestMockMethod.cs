@@ -1,14 +1,13 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 
 namespace Mocky.Test
 {
-    [TestClass]
+    [TestFixture]
     public class TestMockMethod
     {
         MockMethod[] ms = null;
 
-        [TestMethod]
+        [Test]
         public void TestMockMethodForAdd()
         {
             MockMethod add = new MockMethod(typeof(ICalculator), "Add");

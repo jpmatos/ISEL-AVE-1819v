@@ -1,9 +1,9 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Mocky.Test
 {
-    [TestClass]
+    [TestFixture]
     public class TestMockerForPartialCalculator
     {
         readonly ICalculator calc;
@@ -17,7 +17,7 @@ namespace Mocky.Test
             calc = (ICalculator)mock.Create();
         }
         
-        [TestMethod]
+        [Test]
         public void TestCalculatorSuccessfully()
         {
             Assert.AreEqual(calc.Add(5, 7), 12);
@@ -26,7 +26,7 @@ namespace Mocky.Test
             Assert.AreEqual(calc.Mul(3, 3), 9);
         }
 
-        [TestMethod]
+        [Test]
         [ExpectedException(typeof(NotImplementedException))]
         public void TestCalculatorFailing()
         {
