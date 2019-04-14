@@ -40,8 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Calculator.cs" />
-    <Compile Include="ICalculator.cs" />
+    <Compile Include="Interfaces\Calculator.cs" />
+    <Compile Include="Interfaces\ICalculator.cs" />
+    <Compile Include="Interfaces\IHttpRequest.cs" />
+    <Compile Include="Interfaces\Request.cs" />
     <Compile Include="Mocker.cs" />
     <Compile Include="MockMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

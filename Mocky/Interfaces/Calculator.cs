@@ -1,6 +1,6 @@
 using System;
 
-namespace Mocky.Test
+namespace Mocky
 {
     public class Calculator : ICalculator
     {

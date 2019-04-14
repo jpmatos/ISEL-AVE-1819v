@@ -1,5 +1,4 @@
 ﻿using System;
-using Request;
 using NUnit.Framework;
 
 namespace Mocky.Test
@@ -14,8 +13,8 @@ namespace Mocky.Test
         {
             Mocker mockCalc = new Mocker(typeof(ICalculator));
             calc = (ICalculator)mockCalc.Create();
-//            Mocker mockReq = new Mocker(typeof(IHttpRequest));
-//            req = (IHttpRequest) mockReq.Create();
+            Mocker mockReq = new Mocker(typeof(IHttpRequest));
+            req = (IHttpRequest) mockReq.Create();
         }
 
         [Test]

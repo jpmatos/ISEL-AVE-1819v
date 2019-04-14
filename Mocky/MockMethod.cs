@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Mocky
@@ -11,7 +12,10 @@ namespace Mocky
         private Dictionary<object[], object> results;
         private object[] args;
 
-        public MethodInfo Method { get { return meth;  } }
+        public MethodInfo Method
+        {
+            get { return meth; }
+        }
 
         public MockMethod(Type type, string name)
         {
@@ -20,21 +24,23 @@ namespace Mocky
             if (meth == null)
                 throw new ArgumentException("There is no method " + name + " in type " + type);
             this.results = new Dictionary<object[], object>();
-
         }
 
         public MockMethod With(params object[] args)
         {
             if (this.args != null)
-                throw new InvalidOperationException("You already called With() !!!!  Cannot call it twice without calling Return() first!");
+                throw new InvalidOperationException(
+                    "You already called With() !!!!  Cannot call it twice without calling Return() first!");
             ParameterInfo[] argTypes = meth.GetParameters();
-            if (argTypes.Length == args.Length) {
+            if (argTypes.Length == args.Length)
+            {
                 if (areAllArgumentsCompatible(argTypes, args))
                 {
                     this.args = args;
                     return this;
                 }
             }
+
             throw new InvalidOperationException("Invalid arguments: " + String.Join(",", args));
         }
 
@@ -44,23 +50,24 @@ namespace Mocky
             this.args = null;
         }
 
-        public object Call(params object [] args)
+        public object Call(params object[] args)
         {
-            // !!!!! TO DO !!!!!
-
-            throw new NotImplementedException();
+            object[] arrRes = results.Keys.SingleOrDefault(arr => arr.SequenceEqual(args));
+            if (arrRes is null) return 0;
+            return !results.TryGetValue(arrRes, out object res) ? 0 : res;
         }
-        
+
         private static bool areAllArgumentsCompatible(ParameterInfo[] argTypes, object[] args)
         {
             int i = 0;
-            foreach (var p in argTypes) {
+            foreach (var p in argTypes)
+            {
                 Type a = args[i++].GetType();
                 if (!p.ParameterType.IsAssignableFrom(a))
                     return false;
             }
+
             return true;
         }
-        
     }
 }

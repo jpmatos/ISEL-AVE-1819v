@@ -1,4 +1,4 @@
-﻿namespace Mocky.Test
+﻿namespace Mocky
 {
     public interface ICalculator
     {
