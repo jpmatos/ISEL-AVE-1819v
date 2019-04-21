@@ -5,7 +5,7 @@ namespace Mocky.Test
     [TestFixture]
     public class TestMockMethod
     {
-        MockMethod[] ms = null;
+        private MockMethod[] ms = null;
 
         [Test]
         public void TestMockMethodForAdd()

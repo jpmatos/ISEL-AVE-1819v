@@ -15,6 +15,14 @@ namespace Mocky.Test
             mock.When("Add").With(3, 4).Return(7);
             mock.When("Mul").With(3, 3).Return(9);
             calc = (ICalculator)mock.Create();
+//            MockMethod[] arr = {
+//                new MockMethod(typeof(ICalculator), "Add"),
+//                new MockMethod(typeof(ICalculator), "Mul")
+//            };
+//            arr[0].With(5, 7).Return(12);
+//            arr[0].With(3, 4).Return(7);
+//            arr[1].With(3, 3).Return(9);
+//            calc = new Calculator(arr);
         }
         
         [Test]

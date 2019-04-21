@@ -44,6 +44,7 @@
     <Compile Include="Interfaces\ICalculator.cs" />
     <Compile Include="Interfaces\IHttpRequest.cs" />
     <Compile Include="Interfaces\Request.cs" />
+    <Compile Include="MockBase.cs" />
     <Compile Include="Mocker.cs" />
     <Compile Include="MockMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
