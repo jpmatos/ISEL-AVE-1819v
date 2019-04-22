@@ -32,5 +32,10 @@ namespace Mocky
         {
             throw new NotImplementedException();
         }
+
+        public string Three(string str0, int a, int b, int c, string str, int d, string str2, int e)
+        {
+            return (string)mockBase.Invoke("Three", str0, a, b, c, str, d, str2, e);
+        }
     }
 }

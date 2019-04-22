@@ -55,8 +55,8 @@ namespace Mocky
                 MethodAttributes.Public, 
                 CallingConventions.Standard, 
                 new Type[1] { typeof(MockMethod[]) });
-            FieldBuilder arr = typeBuilder.DefineField("arr", typeof(MockBase), FieldAttributes.Private);
-            ImplementConstructor(ctorBuilder, arr);
+            FieldBuilder mockBase = typeBuilder.DefineField("mockBase", typeof(MockBase), FieldAttributes.Private);
+            ImplementConstructor(ctorBuilder, mockBase);
             
             //implement all interface methods
             typeBuilder.AddInterfaceImplementation(klass);
@@ -71,7 +71,7 @@ namespace Mocky
                         method.ReturnType, 
                         GetParameterTypes(method.GetParameters()));
                 
-                    ImplementMethod(methodBuilder, method.Name, arr);
+                    ImplementMethod(methodBuilder, method.Name, mockBase, method.GetParameters(), method.ReturnType);
                 }
             }
             
@@ -142,69 +142,50 @@ namespace Mocky
             return res;
         }
 
-        private void ImplementMethod(MethodBuilder addMethodBuilder, string methodName, FieldInfo arr)
+        private void ImplementMethod(MethodBuilder addMethodBuilder, string methodName, FieldInfo mockBase, ParameterInfo[] parameterTypes, Type returnType)
         {
 
             ILGenerator methIL = addMethodBuilder.GetILGenerator();
             
+            //load mockbase instance
             methIL.Emit(OpCodes.Ldarg_0);
-            methIL.Emit(OpCodes.Ldfld, arr);
+            methIL.Emit(OpCodes.Ldfld, mockBase);
             methIL.Emit(OpCodes.Ldstr, methodName);
             
-            methIL.Emit(OpCodes.Ldc_I4_2);
+            //Object constructor
+            methIL.Emit(OpCodes.Ldc_I4, parameterTypes.Length);
             methIL.Emit(OpCodes.Newarr, typeof(object));
             methIL.Emit(OpCodes.Dup);
             methIL.Emit(OpCodes.Ldc_I4_0);
-            methIL.Emit(OpCodes.Ldarg_1);
-            methIL.Emit(OpCodes.Box, typeof(int));
-            methIL.Emit(OpCodes.Stelem_Ref);
-            methIL.Emit(OpCodes.Dup);
-            methIL.Emit(OpCodes.Ldc_I4_1);
-            methIL.Emit(OpCodes.Ldarg_2);
-            methIL.Emit(OpCodes.Box, typeof(int));
-            methIL.Emit(OpCodes.Stelem_Ref);
+            
+            //load every parameter to the stack
+            for(int i = 0; i < parameterTypes.Length; i++)
+            {
+                methIL.Emit(OpCodes.Ldarg_S, i + 1);
+                
+                if(parameterTypes[i].ParameterType != typeof(string))
+                    methIL.Emit(OpCodes.Box, parameterTypes[i].ParameterType);
+                methIL.Emit(OpCodes.Stelem_Ref);
+                
+                if (i + 1 >= parameterTypes.Length) continue;
+                methIL.Emit(OpCodes.Dup);
+                methIL.Emit(OpCodes.Ldc_I4, i+1);
+            }
+            
+            //call Invoke from MockBase
             MethodInfo methodInfo = typeof(MockBase).GetMethod("Invoke");
-            
             methIL.Emit(OpCodes.Callvirt, methodInfo);
-            methIL.Emit(OpCodes.Unbox_Any, typeof(int));
-            methIL.Emit(OpCodes.Ret);
-
-            /*
-              .method public hidebysig newslot virtual final 
-                      instance int32  Add(int32 a,
-                                          int32 b) cil managed
-              {
-                // Code size       51 (0x33)
-                .maxstack  6
-                .locals init (int32 V_0)
-                IL_0000:  nop
-                IL_0001:  ldarg.0
-                IL_0002:  ldfld      class Mocky.MockBase Mocky.Calculator::mockBase
-                IL_0007:  ldstr      "Add"
-                
-                IL_000c:  ldc.i4.2
-                IL_000d:  newarr     [mscorlib]System.Object
-                IL_0012:  dup
-                IL_0013:  ldc.i4.0
-                IL_0014:  ldarg.1
-                IL_0015:  box        [mscorlib]System.Int32
-                IL_001a:  stelem.ref
-                IL_001b:  dup
-                IL_001c:  ldc.i4.1
-                IL_001d:  ldarg.2
-                IL_001e:  box        [mscorlib]System.Int32
-                IL_0023:  stelem.ref
-                
-                IL_0024:  callvirt   instance object Mocky.MockBase::Invoke(string,
-                                                                            object[])
-                IL_0029:  unbox.any  [mscorlib]System.Int32
-                IL_002e:  stloc.0
-                IL_002f:  br.s       IL_0031
             
-                IL_0031:  ldloc.0
-                IL_0032:  ret
-              } // end of method Calculator::Add
-             */
+            //Return
+            if (returnType == typeof(string))
+            {
+                methIL.Emit(OpCodes.Castclass, typeof(string));
+            }
+            else
+            {
+                methIL.Emit(OpCodes.Unbox_Any, returnType);
+            }
+            methIL.Emit(OpCodes.Ret);
         }
     }
 }
