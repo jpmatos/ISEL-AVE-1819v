@@ -57,6 +57,8 @@
     <Compile Include="ClimaTest.cs" />
     <Compile Include="CsvParserAttrTest.cs" />
     <Compile Include="CsvParserTest.cs" />
+    <Compile Include="Mock\ClimateDataTestOnMock.cs" />
+    <Compile Include="Mock\ClimaTestOnMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -85,6 +87,14 @@
     <ProjectReference Include="..\Csvier\Csvier.csproj">
       <Project>{de857858-8828-4bac-9c05-c5d38a5f3d05}</Project>
       <Name>Csvier</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mocky\Mocky.csproj">
+      <Project>{5543e351-620a-4fdf-a9f4-c9a471604337}</Project>
+      <Name>Mocky</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Request\Request.csproj">
+      <Project>{74b49f1b-c790-4809-8488-1c97cf567995}</Project>
+      <Name>Request</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

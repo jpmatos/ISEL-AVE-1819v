@@ -49,8 +49,6 @@ namespace Csvier.Test
                 Assert.AreEqual(expected[i].Desc, item.Desc);
                 i++;
             }
-
-            //TODO Test Fields
         }
 
         [Test]

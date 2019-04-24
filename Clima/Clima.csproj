@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IWeatherWebApi.cs" />
     <Compile Include="LocationInfo.cs" />
     <Compile Include="WeatherInfo.cs" />
     <Compile Include="WeatherWebApi.cs" />

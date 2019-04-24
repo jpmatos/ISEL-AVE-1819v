@@ -57,6 +57,8 @@ namespace Mocky.Test
             Assert.AreEqual("MockIHttpRequest", klassName);
         }
 
+        //This test will pass despite GetBody being implemented. This behaviour is intended.
+        //It throws NotImplementedException because it does not find the value for "".
         [Test]
         [ExpectedException(typeof(NotImplementedException))]
         public void TestRequestGetBodyNotImplemented()
@@ -64,6 +66,7 @@ namespace Mocky.Test
             req.GetBody("");
         }
 
+        //This test will now fail as Dispose is now implemented and does a simple return.
         [Test]
         [ExpectedException(typeof(NotImplementedException))]
         public void TestRequestDisposeNotImplemented()

@@ -13,5 +13,13 @@ namespace ClimateData
             this.FromYear = FromYear;
             this.ToYear = ToYear;
         }
+
+        public TemperatureYearInfo(string GCM, int FromYear, int ToYear, double Temperature)
+        {
+            this.GCM = GCM;
+            this.FromYear = FromYear;
+            this.ToYear = ToYear;
+            this.Temperature = Temperature;
+        }
     }
 }

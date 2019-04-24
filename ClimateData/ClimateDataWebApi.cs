@@ -4,7 +4,7 @@ using Request;
 
 namespace ClimateData
 {
-    public class ClimateDataWebApi : IDisposable
+    public class ClimateDataWebApi : IClimateDataWebApi
     {
         private const string CLIMATEDATA_HOST = "http://climatedataapi.worldbank.org/climateweb/rest/v1/country/";
         private const string EXTENSION = ".csv";

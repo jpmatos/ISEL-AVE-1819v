@@ -146,7 +146,12 @@ namespace Mocky
         {
 
             ILGenerator methIL = addMethodBuilder.GetILGenerator();
-            
+
+            if (returnType == typeof(void))
+            {
+                methIL.Emit(OpCodes.Ret);
+            }
+
             //load mockbase instance
             methIL.Emit(OpCodes.Ldarg_0);
             methIL.Emit(OpCodes.Ldfld, mockBase);
