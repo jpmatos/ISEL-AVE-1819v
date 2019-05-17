@@ -56,6 +56,7 @@
     <Compile Include="ClimateDataTest.cs" />
     <Compile Include="ClimaTest.cs" />
     <Compile Include="CsvParserAttrTest.cs" />
+    <Compile Include="CsvParserFuncTest.cs" />
     <Compile Include="CsvParserTest.cs" />
     <Compile Include="Mock\ClimateDataTestOnMock.cs" />
     <Compile Include="Mock\ClimaTestOnMock.cs" />

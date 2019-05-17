@@ -10,7 +10,7 @@ namespace Csvier
         public abstract T[] Parse();
         protected abstract PropertyInfo FindProperty(string arg);
         protected abstract FieldInfo FindField(string pairArg);
-        
+
         protected struct Pair
         {
             public readonly string arg;
@@ -24,7 +24,7 @@ namespace Csvier
         }
 
         protected static readonly Dictionary<Type, MethodBase> parsers = new Dictionary<Type, MethodBase>();
-        protected readonly char separator;
+        public char separator { get; }
         protected readonly List<Pair> ctorPairs = new List<Pair>();
         protected readonly List<Pair> propPairs = new List<Pair>();
         protected readonly List<Pair> fieldPairs = new List<Pair>();
@@ -33,6 +33,19 @@ namespace Csvier
         protected AbstractParser(char separator)
         {
             this.separator = separator;
+        }
+
+        public T[] Parse(Func<string, T> parser)
+        {
+            T[] res = new T[arr.Length];
+            
+            int i = 0;
+            foreach (string str in arr)
+            {
+                res[i++] = parser.Invoke(str);
+            }
+
+            return res;
         }
         
 

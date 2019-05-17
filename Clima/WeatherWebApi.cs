@@ -7,7 +7,7 @@ namespace Clima
 {
     public class WeatherWebApi : IWeatherWebApi
     {
-        const string WEATHER_KEY = "005e3c30b4fb4769a1c205526191503";
+        const string WEATHER_KEY = "ff4b3b9741954c10915201150191705";
         const string WEATHER_HOST = "http://api.worldweatheronline.com/premium/v1/";
 
         const string PATH_WEATHER = WEATHER_HOST +
