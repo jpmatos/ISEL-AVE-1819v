@@ -5,9 +5,9 @@ using System.Reflection;
 
 namespace Csvier
 {
-    public abstract class AbstractParser : IParser
+    public abstract class AbstractParser<T> : IParser<T>
     {
-        public abstract object[] Parse();
+        public abstract T[] Parse();
         protected abstract PropertyInfo FindProperty(string arg);
         protected abstract FieldInfo FindField(string pairArg);
         
@@ -24,78 +24,76 @@ namespace Csvier
         }
 
         protected static readonly Dictionary<Type, MethodBase> parsers = new Dictionary<Type, MethodBase>();
-        protected readonly Type klass;
         protected readonly char separator;
         protected readonly List<Pair> ctorPairs = new List<Pair>();
         protected readonly List<Pair> propPairs = new List<Pair>();
         protected readonly List<Pair> fieldPairs = new List<Pair>();
         public string[] arr { get; protected set; }
 
-        protected AbstractParser(Type klass, char separator)
+        protected AbstractParser(char separator)
         {
-            this.klass = klass;
             this.separator = separator;
         }
         
 
-        public AbstractParser CtorArg(string arg, int col)
+        public AbstractParser<T> CtorArg(string arg, int col)
         {
             ctorPairs.Add(new Pair(arg, col));
             return this;
         }
 
-        public AbstractParser PropArg(string arg, int col)
+        public AbstractParser<T> PropArg(string arg, int col)
         {
             propPairs.Add(new Pair(arg, col));
             return this;
         }
 
-        public AbstractParser FieldArg(string arg, int col)
+        public AbstractParser<T> FieldArg(string arg, int col)
         {
             fieldPairs.Add(new Pair(arg, col));
             return this;
         }
 
-        public AbstractParser Load(string src)
+        public AbstractParser<T> Load(string src)
         {
             arr = src.Split(new[] {"\r\n", "\r", "\n"}, StringSplitOptions.None);
             return this;
         }
 
-        public AbstractParser Remove(int count)
+        public AbstractParser<T> Remove(int count)
         {
             arr = arr.Skip(count).ToArray();
             return this;
         }
 
-        public AbstractParser RemoveEmpties()
+        public AbstractParser<T> RemoveEmpties()
         {
             arr =  arr.Where(str => !string.IsNullOrEmpty(str)).ToArray();
             return this;
         }
 
-        public AbstractParser RemoveWith(string word)
+        public AbstractParser<T> RemoveWith(string word)
         {
             arr = arr.Where(str => !str.StartsWith(word)).ToArray();
             return this;
         }
 
-        public AbstractParser RemoveEvenIndexes()
+        public AbstractParser<T> RemoveEvenIndexes()
         {
             arr = arr.Where((str, index) => index % 2 != 0).ToArray();
             return this;
         }
 
-        public AbstractParser RemoveOddIndexes()
+        public AbstractParser<T> RemoveOddIndexes()
         {
             arr = arr.Where((str, index) => index % 2 == 0).ToArray();
             return this;
         }
 
-        protected object[] ConstructArray(ConstructorInfo con)
+        protected T[] ConstructArray(ConstructorInfo con)
         {
             ParameterInfo[] parameters = con.GetParameters();
-            object[] res = new object[arr.Length];
+            T[] res = new T[arr.Length];
             object[] args = new object[ctorPairs.Count];
             for (int i = 0; i < res.Length; i++)
             {
@@ -110,13 +108,13 @@ namespace Csvier
                     args[j] = parsedValue;
                 }
 
-                res[i] = con.Invoke(args);
+                res[i] = (T) con.Invoke(args);
             }
 
             return res;
         }
 
-        protected void SetProperties(object[] res)
+        protected void SetProperties(T[] res)
         {
             foreach (Pair pair in propPairs)
             {
@@ -135,7 +133,7 @@ namespace Csvier
             }
         }
 
-        protected void SetFields(object[] res)
+        protected void SetFields(T[] res)
         {
             foreach (Pair pair in fieldPairs)
             {

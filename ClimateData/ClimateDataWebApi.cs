@@ -41,13 +41,13 @@ namespace ClimateData
             string searchQuery = string.Format(PAST_CLIMATEDATA, "annualavg", "tas", from.ToString(), to.ToString(), country);
             string searchResult = req.GetBody(searchQuery);
 
-            CsvParser climateParser = (CsvParser) new CsvParser(typeof(TemperatureYearInfo), ',')
+            CsvParser<TemperatureYearInfo> climateParser = (CsvParser<TemperatureYearInfo>) new CsvParser<TemperatureYearInfo>(',')
                 .CtorArg("GCM", 0)
                 .CtorArg("FromYear", 2)
                 .CtorArg("ToYear", 3)
                 .PropArg("Temperature", 4);
 
-            object[] items = climateParser
+            TemperatureYearInfo[] items = climateParser
                 .Load(searchResult)
                 .Remove(1)
                 .RemoveEmpties()

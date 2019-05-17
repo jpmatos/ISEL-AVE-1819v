@@ -16,8 +16,8 @@ namespace Clima
 
         const string SEARCH = WEATHER_HOST + "search.ashx?query={0}&format=tab&key=" + WEATHER_KEY;
 
-        readonly CsvParser pastWeather;    //TODO why is this here
-        readonly CsvParser locations;
+        readonly CsvParser<WeatherInfo> pastWeather;    //TODO why is this here
+        readonly CsvParser<LocationInfo> locations;
         readonly IHttpRequest req;
 
         public WeatherWebApi() : this(new HttpRequest())
@@ -44,12 +44,12 @@ namespace Clima
             string searchQuery = string.Format(PATH_WEATHER, latStr, logStr, fromStr, toStr);
             string searchResult = req.GetBody(searchQuery);
 
-            CsvParser weatherParser = (CsvParser) new CsvParser(typeof(WeatherInfo), ',')
+            CsvParser<WeatherInfo> weatherParser = (CsvParser<WeatherInfo>) new CsvParser<WeatherInfo>(',')
                 .CtorArg("date", 0)
                 .CtorArg("tempC", 2)
                 .PropArg("PrecipMM", 11)
                 .PropArg("Desc", 10);
-            object[] items = weatherParser
+            WeatherInfo[] items = weatherParser
                 .Load(searchResult)
                 .RemoveWith("#")
                 .Remove(1)
@@ -68,12 +68,12 @@ namespace Clima
             string searchQuery = string.Format(SEARCH, query);
             string searchResult = req.GetBody(searchQuery);
 
-            CsvParser locationsParser = (CsvParser) new CsvParser(typeof(LocationInfo), '\t')
+            CsvParser<LocationInfo> locationsParser = (CsvParser<LocationInfo>) new CsvParser<LocationInfo>('\t')
                 .CtorArg("country", 1)
                 .CtorArg("region", 2)
                 .CtorArg("latitude", 3)
                 .CtorArg("longitude", 4);
-            object[] items = locationsParser
+            LocationInfo[] items = locationsParser
                 .Load(searchResult)
                 .RemoveWith("#")
                 .RemoveEmpties()

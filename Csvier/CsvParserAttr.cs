@@ -5,21 +5,21 @@ using System.Reflection;
 
 namespace Csvier
 {
-    public class CsvParserAttr : AbstractParser
+    public class CsvParserAttr<T> : AbstractParser<T>
     {
         private readonly string constructorName;
         private Dictionary<string, PropertyInfo> propertyDict;
         private Dictionary<string, FieldInfo> fieldDict;
         private bool filledDictionaries;
         
-        public CsvParserAttr(Type klass, string constructorName, char separator = ',') : base(klass, separator)
+        public CsvParserAttr(string constructorName, char separator = ',') : base(separator)
         {
             this.constructorName = constructorName;
         }
 
         private void FillPropertyDict()
         {
-            foreach (PropertyInfo propertyInfo in klass.GetProperties())
+            foreach (PropertyInfo propertyInfo in typeof(T).GetProperties())
             {
                 foreach (Attribute attribute in Attribute.GetCustomAttributes(propertyInfo))
                 {
@@ -32,7 +32,7 @@ namespace Csvier
 
         private void FillFieldDict()
         {
-            foreach (FieldInfo fieldInfo in klass.GetFields())
+            foreach (FieldInfo fieldInfo in typeof(T).GetFields())
             {
                 foreach (Attribute attribute in Attribute.GetCustomAttributes(fieldInfo))
                 {
@@ -43,7 +43,7 @@ namespace Csvier
             }
         }
 
-        public override object[] Parse()
+        public override T[] Parse()
         {
             if (!filledDictionaries)
             {
@@ -54,7 +54,7 @@ namespace Csvier
                 filledDictionaries = true;
             }
             ConstructorInfo con = FindConstructor();
-            object[] res = ConstructArray(con);
+            T[] res = ConstructArray(con);
             SetProperties(res);
             SetFields(res);
             return res;
@@ -74,7 +74,7 @@ namespace Csvier
 
         private ConstructorInfo FindConstructor()
         {
-            foreach (ConstructorInfo constructor in klass.GetConstructors())
+            foreach (ConstructorInfo constructor in typeof(T).GetConstructors())
             {
                 foreach (Attribute attribute in Attribute.GetCustomAttributes(constructor))
                 {

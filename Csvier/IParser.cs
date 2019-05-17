@@ -1,10 +1,10 @@
 namespace Csvier
 {
-    public interface IParser
+    public interface IParser<T>
     {
-        AbstractParser CtorArg(string arg, int col);
-        AbstractParser PropArg(string arg, int col);
-        AbstractParser FieldArg(string arg, int col);
-        object[] Parse();
+        AbstractParser<T> CtorArg(string arg, int col);
+        AbstractParser<T> PropArg(string arg, int col);
+        AbstractParser<T> FieldArg(string arg, int col);
+        T[] Parse();
     }
 }
