@@ -43,6 +43,7 @@
     <Compile Include="AbstractParser.cs" />
     <Compile Include="CsvParser.cs" />
     <Compile Include="CsvParserAttr.cs" />
+    <Compile Include="Enumerables\RowEnumerable.cs" />
     <Compile Include="IParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

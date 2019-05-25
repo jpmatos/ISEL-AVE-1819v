@@ -52,6 +52,14 @@ namespace Csvier
             return res;
         }
 
+        public IEnumerable<T> ToEnumerable(Func<string, T> parser)
+        {
+            foreach (string str in src)
+            {
+                yield return parser.Invoke(str);
+            }
+        }
+
 
         public AbstractParser<T> CtorArg(string arg, int col)
         {

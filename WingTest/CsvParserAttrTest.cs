@@ -75,27 +75,27 @@ namespace Csvier.Test
                 "2019-01-05,24,16,61,8,13,70,ENE,113,http://cdn.worldweatheronline.net/images/wsymbols01_png_64/wsymbol_0001_sunny.png,Sunny,0.0,64,10,1032,0,13,55,6,43,12,53,13,21,12,53\n";
             CsvParserAttr<WeatherInfo> pastWeather = (CsvParserAttr<WeatherInfo>) new CsvParserAttr<WeatherInfo>("Ctor3").Load(sampleWeather);
 
-            pastWeather.RemoveWith("#");
-            Assert.AreEqual("",
-                pastWeather.arr[0]);
-
-            pastWeather.RemoveEmpties();
-            Assert.AreEqual("Not Available",
-                pastWeather.arr[0]);
-
-            pastWeather.Remove(1);
-            Assert.AreEqual("2019-01-01,17,63,12,54,07:45 AM,05:26 PM,03:18 AM,02:23 PM,Waning Crescent,34",
-                pastWeather.arr[0]);
-
-            pastWeather.RemoveEvenIndexes();
-            Assert.AreEqual(
-                "2019-01-02,24,18,64,6,9,179,S,116,http://cdn.worldweatheronline.net/images/wsymbols01_png_64/wsymbol_0002_sunny_intervals.png,Partly cloudy,0.0,57,10,1030,15,14,57,6,42,13,56,11,17,13,56",
-                pastWeather.arr[1]);
-
-            pastWeather.RemoveOddIndexes();
-            Assert.AreEqual(
-                "2019-01-03,24,16,60,7,11,89,E,113,http://cdn.worldweatheronline.net/images/wsymbols01_png_64/wsymbol_0001_sunny.png,Sunny,0.0,67,10,1026,3,13,55,7,45,12,54,11,18,12,54",
-                pastWeather.arr[1]);
+//            pastWeather.RemoveWith("#");
+//            Assert.AreEqual("",
+//                pastWeather.arr[0]);
+//
+//            pastWeather.RemoveEmpties();
+//            Assert.AreEqual("Not Available",
+//                pastWeather.arr[0]);
+//
+//            pastWeather.Remove(1);
+//            Assert.AreEqual("2019-01-01,17,63,12,54,07:45 AM,05:26 PM,03:18 AM,02:23 PM,Waning Crescent,34",
+//                pastWeather.arr[0]);
+//
+//            pastWeather.RemoveEvenIndexes();
+//            Assert.AreEqual(
+//                "2019-01-02,24,18,64,6,9,179,S,116,http://cdn.worldweatheronline.net/images/wsymbols01_png_64/wsymbol_0002_sunny_intervals.png,Partly cloudy,0.0,57,10,1030,15,14,57,6,42,13,56,11,17,13,56",
+//                pastWeather.arr[1]);
+//
+//            pastWeather.RemoveOddIndexes();
+//            Assert.AreEqual(
+//                "2019-01-03,24,16,60,7,11,89,E,113,http://cdn.worldweatheronline.net/images/wsymbols01_png_64/wsymbol_0001_sunny.png,Sunny,0.0,67,10,1026,3,13,55,7,45,12,54,11,18,12,54",
+//                pastWeather.arr[1]);
         }
     }
 }
