@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Csvier.Enumerables;
 
 namespace Csvier
 {
@@ -27,8 +28,11 @@ namespace Csvier
         public char separator { get; }
         protected readonly List<Pair> ctorPairs = new List<Pair>();
         protected readonly List<Pair> propPairs = new List<Pair>();
+
         protected readonly List<Pair> fieldPairs = new List<Pair>();
-        public string[] arr { get; protected set; }
+
+        //public string[] arr { get; protected set; }
+        public RowEnumerable src { get; protected set; }
 
         protected AbstractParser(char separator)
         {
@@ -37,17 +41,17 @@ namespace Csvier
 
         public T[] Parse(Func<string, T> parser)
         {
-            T[] res = new T[arr.Length];
-            
+            T[] res = new T[src.Count()];
+
             int i = 0;
-            foreach (string str in arr)
+            foreach (string str in src)
             {
                 res[i++] = parser.Invoke(str);
             }
 
             return res;
         }
-        
+
 
         public AbstractParser<T> CtorArg(string arg, int col)
         {
@@ -67,50 +71,56 @@ namespace Csvier
             return this;
         }
 
-        public AbstractParser<T> Load(string src)
+        public AbstractParser<T> Load(string csvSrc)
         {
-            arr = src.Split(new[] {"\r\n", "\r", "\n"}, StringSplitOptions.None);
+            src = new RowEnumerable(csvSrc);
+            //arr = src.Split(new[] {"\r\n", "\r", "\n"}, StringSplitOptions.None);
             return this;
         }
 
         public AbstractParser<T> Remove(int count)
         {
-            arr = arr.Skip(count).ToArray();
+            src.Remove(count);
+            //arr = arr.Skip(count).ToArray();
             return this;
         }
 
         public AbstractParser<T> RemoveEmpties()
         {
-            arr =  arr.Where(str => !string.IsNullOrEmpty(str)).ToArray();
+            src.RemoveEmpties();
             return this;
         }
 
         public AbstractParser<T> RemoveWith(string word)
         {
-            arr = arr.Where(str => !str.StartsWith(word)).ToArray();
+            src.RemoveWith(word);
+            //src = src.Where(str => !str.StartsWith(word));
             return this;
         }
 
         public AbstractParser<T> RemoveEvenIndexes()
         {
-            arr = arr.Where((str, index) => index % 2 != 0).ToArray();
+            src.RemoveEvens();
+            //arr = arr.Where((str, index) => index % 2 != 0).ToArray();
             return this;
         }
 
         public AbstractParser<T> RemoveOddIndexes()
         {
-            arr = arr.Where((str, index) => index % 2 == 0).ToArray();
+            src.RemoveOdds();
+            //arr = arr.Where((str, index) => index % 2 == 0).ToArray();
             return this;
         }
 
         protected T[] ConstructArray(ConstructorInfo con)
         {
             ParameterInfo[] parameters = con.GetParameters();
-            T[] res = new T[arr.Length];
+            T[] res = new T[src.Count()];
             object[] args = new object[ctorPairs.Count];
-            for (int i = 0; i < res.Length; i++)
+            int i = 0;
+            foreach (string str in src)
             {
-                string[] values = arr[i].Split(separator);
+                string[] values = str.Split(separator);
                 for (int j = 0; j < args.Length; j++)
                 {
                     int index = ctorPairs[j].col;
@@ -122,6 +132,7 @@ namespace Csvier
                 }
 
                 res[i] = (T) con.Invoke(args);
+                i++;
             }
 
             return res;
@@ -134,9 +145,11 @@ namespace Csvier
                 PropertyInfo propertyInfo = FindProperty(pair.arg);
                 if (propertyInfo == null) continue;
                 int i = 0;
+                IEnumerator<string> enm = src.GetEnumerator();
                 foreach (object obj in res)
                 {
-                    string[] values = arr[i++].Split(separator);
+                    enm.MoveNext();
+                    string[] values = enm.Current.Split(separator);
                     int index = pair.col;
                     string value = values[index];
                     MethodBase parser = FindParser(propertyInfo.PropertyType);
@@ -153,9 +166,10 @@ namespace Csvier
                 FieldInfo fieldInfo = FindField(pair.arg);
                 if (fieldInfo == null) continue;
                 int i = 0;
+                IEnumerator<string> enm = src.GetEnumerator();
                 foreach (object obj in res)
                 {
-                    string[] values = arr[i++].Split(separator);
+                    string[] values = enm.Current.Split(separator);
                     int index = pair.col;
                     string value = values[index];
                     MethodBase parser = FindParser(fieldInfo.FieldType);
