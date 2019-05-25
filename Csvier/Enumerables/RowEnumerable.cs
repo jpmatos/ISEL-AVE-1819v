@@ -22,7 +22,6 @@ namespace Csvier.Enumerables
         public IEnumerator<string> GetEnumerator()
         {
             string line = "";
-            Console.WriteLine(line);
             foreach (char c in src)
             {
                 if (c == '\n' || c == '\r')
@@ -51,16 +50,12 @@ namespace Csvier.Enumerables
 
         private bool VerifyConditions(string res)
         {
-            Console.WriteLine(res);
-            
-            Console.WriteLine("Remove");
             if (remove > 0)
             {
                 remove--;
                 return false;
             }
             
-            Console.WriteLine("RemoveWords");
             foreach (string word in removeWords)
             {
                 if (res.StartsWith(word))
@@ -68,20 +63,17 @@ namespace Csvier.Enumerables
                 
             }
 
-            Console.WriteLine("RemoveEmpties");
             if (removeEmpties == true)
             {
                 if (string.IsNullOrEmpty(res))
                     return false;
             }
 
-            Console.WriteLine("RemoveEvens");
             if (removeEvens == true)
             {
                 if (!isOdd) return false;
             }
 
-            Console.WriteLine("RemoveOdds");
             if (removeOdds == true)
             {
                 if (isOdd) return false;

@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Csvier.Enumerables;
+// ReSharper disable All
 
 namespace Csvier
 {
@@ -82,14 +84,12 @@ namespace Csvier
         public AbstractParser<T> Load(string csvSrc)
         {
             src = new RowEnumerable(csvSrc);
-            //arr = src.Split(new[] {"\r\n", "\r", "\n"}, StringSplitOptions.None);
             return this;
         }
 
         public AbstractParser<T> Remove(int count)
         {
             src.Remove(count);
-            //arr = arr.Skip(count).ToArray();
             return this;
         }
 
@@ -102,21 +102,18 @@ namespace Csvier
         public AbstractParser<T> RemoveWith(string word)
         {
             src.RemoveWith(word);
-            //src = src.Where(str => !str.StartsWith(word));
             return this;
         }
 
         public AbstractParser<T> RemoveEvenIndexes()
         {
             src.RemoveEvens();
-            //arr = arr.Where((str, index) => index % 2 != 0).ToArray();
             return this;
         }
 
         public AbstractParser<T> RemoveOddIndexes()
         {
             src.RemoveOdds();
-            //arr = arr.Where((str, index) => index % 2 == 0).ToArray();
             return this;
         }
 
@@ -157,11 +154,11 @@ namespace Csvier
                 foreach (object obj in res)
                 {
                     enm.MoveNext();
-                    string[] values = enm.Current.Split(separator);
+                    WordEnumerable values = new WordEnumerable(enm.Current, separator);
                     int index = pair.col;
-                    string value = values[index];
+                    string value = values.GetWord(index);
                     MethodBase parser = FindParser(propertyInfo.PropertyType);
-                    var parsedValue = parser != null ? parser.Invoke(null, new object[] {value}) : value;
+                    object parsedValue = parser != null ? parser.Invoke(null, new object[] {value}) : value;
                     propertyInfo.SetValue(obj, parsedValue);
                 }
             }
@@ -177,17 +174,17 @@ namespace Csvier
                 IEnumerator<string> enm = src.GetEnumerator();
                 foreach (object obj in res)
                 {
-                    string[] values = enm.Current.Split(separator);
+                    WordEnumerable values = new WordEnumerable(enm.Current, separator);
                     int index = pair.col;
-                    string value = values[index];
+                    string value = values.GetWord(index);
                     MethodBase parser = FindParser(fieldInfo.FieldType);
-                    var parsedValue = parser != null ? parser.Invoke(null, new object[] {value}) : value;
+                    object parsedValue = parser != null ? parser.Invoke(null, new object[] {value}) : value;
                     fieldInfo.SetValue(obj, parsedValue);
                 }
             }
         }
 
-        protected static MethodBase FindParser(Type paramType)
+        private static MethodBase FindParser(Type paramType)
         {
             if (parsers.TryGetValue(paramType, out var parser)) return parser;
 
