@@ -61,6 +61,7 @@
     <Compile Include="Lazy\CsvParserFuncLazyTest.cs" />
     <Compile Include="Mock\ClimateDataTestOnMock.cs" />
     <Compile Include="Mock\ClimaTestOnMock.cs" />
+    <Compile Include="Mock\Then\ClimateDataTestOnMockThen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

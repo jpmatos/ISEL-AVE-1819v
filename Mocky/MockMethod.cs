@@ -11,6 +11,7 @@ namespace Mocky
         private readonly MethodInfo meth;
         private Dictionary<object[], object> results;
         private object[] args;
+        private Delegate handler;
 
         public MethodInfo Method
         {
@@ -52,6 +53,9 @@ namespace Mocky
 
         public object Call(params object[] args)
         {
+            if (handler != null)
+                return handler.DynamicInvoke(args);
+            
             object[] arrRes = results.Keys.SingleOrDefault(arr => arr.SequenceEqual(args));
             if (arrRes is null) return 0;
             return !results.TryGetValue(arrRes, out object res) ? 0 : res;
@@ -68,6 +72,30 @@ namespace Mocky
             }
 
             return true;
+        }
+        
+        public void Then<T, R, U, V>(Func<int, int, string, object[]> func)
+        {
+            if (handler != null) throw new InvalidOperationException("You already specified a handler!");
+            handler = func;
+        }
+
+        public void Then<T, R, V>(Func<int, int, int> func)
+        {
+            if (handler != null) throw new InvalidOperationException("You already specified a handler!");
+            handler = func;
+        }
+        
+        public void Then<T, R>(Func<string, string> func)
+        {
+            if (handler != null) throw new InvalidOperationException("You already specified a handler!");
+            handler = func;
+        }
+
+        public void Then(Action action)
+        {
+            if (handler != null) throw new InvalidOperationException("You already specified a handler!");
+            handler = action;
         }
     }
 }
