@@ -58,7 +58,6 @@
     <Compile Include="CsvParserAttrTest.cs" />
     <Compile Include="CsvParserFuncTest.cs" />
     <Compile Include="CsvParserTest.cs" />
-    <Compile Include="Lazy\Counter.cs" />
     <Compile Include="Lazy\CsvParserFuncLazyTest.cs" />
     <Compile Include="Mock\ClimateDataTestOnMock.cs" />
     <Compile Include="Mock\ClimaTestOnMock.cs" />

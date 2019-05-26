@@ -7,7 +7,7 @@ namespace Clima
 {
     public class WeatherWebApi : IWeatherWebApi
     {
-        const string WEATHER_KEY = "ff4b3b9741954c10915201150191705";
+        const string WEATHER_KEY = "2623ee8a52024a6180f02056192605";
         const string WEATHER_HOST = "http://api.worldweatheronline.com/premium/v1/";
 
         const string PATH_WEATHER = WEATHER_HOST +
@@ -46,9 +46,10 @@ namespace Clima
 
             CsvParser<WeatherInfo> weatherParser = (CsvParser<WeatherInfo>) new CsvParser<WeatherInfo>(',')
                 .CtorArg("date", 0)
-                .CtorArg("tempC", 2)
-                .PropArg("PrecipMM", 11)
-                .PropArg("Desc", 10);
+                .CtorArg("tempC", 1)
+                .PropArg("Desc", 9)
+                .PropArg("PrecipMM", 10);
+            
             WeatherInfo[] items = weatherParser
                 .Load(searchResult)
                 .RemoveWith("#")

@@ -40,7 +40,7 @@ namespace Csvier.Test
             Mocker mocker = new Mocker(typeof(IHttpRequest));
             mocker
                 .When("GetBody")
-                .With("http://api.worldweatheronline.com/premium/v1/search.ashx?query=oporto&format=tab&key=005e3c30b4fb4769a1c205526191503")
+                .With("http://api.worldweatheronline.com/premium/v1/search.ashx?query=oporto&format=tab&key=2623ee8a52024a6180f02056192605")
                 .Return(
                     "#The Search API\n" +
                     "#Data returned is laid out in the following order:-\n" +
@@ -97,7 +97,7 @@ namespace Csvier.Test
             Mocker mocker = new Mocker(typeof(IHttpRequest));
             mocker
                 .When("GetBody")
-                .With("http://api.worldweatheronline.com/premium/v1/past-weather.ashx?q=37.017,-7.933&date=2019-01-01&enddate=2019-01-30&tp=24&format=csv&key=005e3c30b4fb4769a1c205526191503")
+                .With("http://api.worldweatheronline.com/premium/v1/past-weather.ashx?q=37.017,-7.933&date=2019-01-01&enddate=2019-01-30&tp=24&format=csv&key=2623ee8a52024a6180f02056192605")
                 .Return(
                     "#The CSV format is in following way:-\n" +
                     "#The day information is available in following format:-\n" +

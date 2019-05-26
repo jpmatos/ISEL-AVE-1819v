@@ -18,10 +18,13 @@ namespace Csvier.Enumerables
         public IEnumerator<string> GetEnumerator()
         {
             string word = "";
+            int i = 0;
             foreach (char c in line)
             {
-                if (c == separator)
+                if (c == separator || c == '\n' || c == '\r' || line.Length == i+1)
                 {
+                    if (line.Length == i+1)
+                        word += c;
                     yield return word;
                     word = "";
                 }
@@ -29,6 +32,7 @@ namespace Csvier.Enumerables
                 {
                     word += c;
                 }
+                i++;
             }
         }
 
@@ -39,6 +43,7 @@ namespace Csvier.Enumerables
 
         public string GetWord(int index)
         {
+            //index--;
             foreach (string str in this)
             {
                 if (index > 0)

@@ -13,7 +13,9 @@ namespace Csvier.Enumerables
         private bool removeOdds = false;
         private bool removeEvens = false;
         private bool isOdd = true;
-        
+        private int evensRemoved = 0;
+        private int linesRemoved = 0;
+
         public RowEnumerable(string src)
         {
             this.src = src;
@@ -22,6 +24,9 @@ namespace Csvier.Enumerables
         public IEnumerator<string> GetEnumerator()
         {
             string line = "";
+            linesRemoved = remove;
+            evensRemoved = 0;
+            isOdd = true;
             foreach (char c in src)
             {
                 if (c == '\n' || c == '\r')
@@ -32,6 +37,8 @@ namespace Csvier.Enumerables
                         line = "";
                         continue;
                     }
+
+                    isOdd = !isOdd;
                     yield return line;
                     line = "";
                 }
@@ -40,7 +47,6 @@ namespace Csvier.Enumerables
                     line += c;
                 }
             }
-            //What to do if empty?
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -50,17 +56,11 @@ namespace Csvier.Enumerables
 
         private bool VerifyConditions(string res)
         {
-            if (remove > 0)
-            {
-                remove--;
-                return false;
-            }
-            
+
             foreach (string word in removeWords)
             {
                 if (res.StartsWith(word))
                     return false;
-                
             }
 
             if (removeEmpties == true)
@@ -68,15 +68,29 @@ namespace Csvier.Enumerables
                 if (string.IsNullOrEmpty(res))
                     return false;
             }
+            
+            if (linesRemoved > 0)
+            {
+                linesRemoved--;
+                return false;
+            }
 
             if (removeEvens == true)
             {
-                if (!isOdd) return false;
+                if (!isOdd)
+                {
+                    evensRemoved++;
+                    return false;
+                }
             }
 
             if (removeOdds == true)
             {
-                if (isOdd) return false;
+                if (evensRemoved % 2 == 0 && isOdd)
+                    return false;
+
+                if (evensRemoved % 2 != 0 && !isOdd)
+                    return false;
             }
 
             return true;
@@ -105,6 +119,18 @@ namespace Csvier.Enumerables
         public void RemoveOdds()
         {
             removeOdds = true;
+        }
+
+        public string GetLine(int index)
+        {
+            foreach (string str in this)
+            {
+                if (index > 0)
+                    index--;
+                else
+                    return str;
+            }
+            throw new IndexOutOfRangeException();
         }
     }
 }

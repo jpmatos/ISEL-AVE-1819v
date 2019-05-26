@@ -30,7 +30,6 @@ namespace Csvier
         public char separator { get; }
         protected readonly List<Pair> ctorPairs = new List<Pair>();
         protected readonly List<Pair> propPairs = new List<Pair>();
-
         protected readonly List<Pair> fieldPairs = new List<Pair>();
 
         //public string[] arr { get; protected set; }
@@ -125,17 +124,16 @@ namespace Csvier
             int i = 0;
             foreach (string str in src)
             {
-                string[] values = str.Split(separator);
+                WordEnumerable values = new WordEnumerable(str, separator);
                 for (int j = 0; j < args.Length; j++)
                 {
                     int index = ctorPairs[j].col;
-                    string value = values[index];
+                    string value = values.GetWord(index);
                     Type paramType = parameters[j].ParameterType;
                     MethodBase parser = FindParser(paramType);
-                    var parsedValue = parser != null ? parser.Invoke(null, new object[] {value}) : value;
+                    object parsedValue = parser != null ? parser.Invoke(null, new object[] {value}) : value;
                     args[j] = parsedValue;
                 }
-
                 res[i] = (T) con.Invoke(args);
                 i++;
             }
@@ -149,7 +147,6 @@ namespace Csvier
             {
                 PropertyInfo propertyInfo = FindProperty(pair.arg);
                 if (propertyInfo == null) continue;
-                int i = 0;
                 IEnumerator<string> enm = src.GetEnumerator();
                 foreach (object obj in res)
                 {
